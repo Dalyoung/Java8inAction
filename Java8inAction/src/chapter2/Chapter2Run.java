@@ -4,10 +4,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class Filters {
+public class Chapter2Run {
 	public static void main(String[] args) {
-		Filters f = new Filters();
-		f.test();
+		Chapter2Run c = new Chapter2Run();
+		c.test();
 	}
 	
 	public void test(){
