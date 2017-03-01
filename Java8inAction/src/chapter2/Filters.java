@@ -4,22 +4,44 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class Example {
+public class Filters {
 	public static void main(String[] args) {
-		Example e = new Example();
-		e.test();
+		Filters f = new Filters();
+		f.test();
 	}
 	
 	public void test(){
-		List<Apple> inventory = new ArrayList<>();
-		inventory.add(new Apple("green", 70));
-		inventory.add(new Apple("blue", 80));
-		inventory.add(new Apple("red", 30));
-		inventory.add(new Apple("green", 50));
-		inventory.add(new Apple("black", 60));
+		List<Apple> inventory = Arrays.asList(
+				new Apple("green", 170)
+				, new Apple("green", 160)
+				, new Apple("red", 150)
+				, new Apple("red", 110)
+				, new Apple("green", 120)
+				, new Apple("green", 160)
+				, new Apple("blue", 170)
+				);
 		System.out.println(Arrays.toString(filterGreenApples(inventory).toArray()));
 		
-		System.out.println(Arrays.toString(filterApples(inventory, new AppleHeavyWeightPredicate()).toArray()));
+		List<Apple> heavyApples = filterApples(inventory, new AppleHeavyWeightPredicate());
+		List<Apple> greenApples = filterApples(inventory, new AppleGreenColorPredicate());
+		System.out.println(Arrays.toString(heavyApples.toArray()));
+		System.out.println(Arrays.toString(greenApples.toArray()));
+		
+		List<Apple> redApples = filterApples(inventory, new ApplePredicate() {
+			@Override
+			public boolean test(Apple apple) {
+				return "red".equals(apple.getColor());
+			}
+		});
+		System.out.println(Arrays.toString(redApples.toArray()));
+		
+		List<Apple> redApples2 = filter(inventory, (Apple apple) -> "red".equals(apple.getColor()));
+		System.out.println(Arrays.toString(redApples2.toArray()));
+		
+		List<Integer> numbers = Arrays.asList(1, 2, 3, 4, 5);
+		List<Integer> evenNumbers = filter(numbers, (Integer i) -> i % 2 == 0);
+		System.out.println(Arrays.toString(evenNumbers.toArray()));
+		
 	}
 	
 	public static List<Apple> filterGreenApples(List<Apple> inventory){
@@ -68,6 +90,16 @@ public class Example {
 		for(Apple apple : inventory){
 			if(p.test(apple)){
 				result.add(apple);
+			}
+		}
+		return result;
+	}
+	
+	public static<T> List<T> filter(List<T> list, Predicate<T> p){
+		List<T> result = new ArrayList<>();
+		for(T e : list){
+			if(p.test(e)){
+				result.add(e);
 			}
 		}
 		return result;
