@@ -1,0 +1,2 @@
+This is data.txt file..
+It has nothing..
